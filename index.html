@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tide & Tails — Handmade Sailing Dog Coats</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #7a9e87;
+    --sage-light: #a8c4b0;
+    --sage-dark: #4f7a5e;
+    --teal: #5b8a8a;
+    --teal-light: #88b3b3;
+    --teal-pale: #d4e9e9;
+    --offwhite: #f5f0ea;
+    --sand: #e8ddd0;
+    --rope: #c4a882;
+    --dark: #2c3830;
+    --mid: #5a6b5f;
+    --text: #3a4a3e;
+    --white: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--offwhite);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(245, 240, 234, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122, 158, 135, 0.2);
+    transition: box-shadow 0.3s;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--sage-dark);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+
+  .nav-logo span {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--sage-dark); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem 6rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--sage-dark);
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--mid);
+    max-width: 420px;
+    margin: 1.8rem 0 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--sage-dark);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    border: none;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.25s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--dark); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--sage-dark);
+    padding: 0.9rem 2rem;
+    border: 1.5px solid var(--sage-dark);
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .btn-outline:hover {
+    background: var(--sage-dark);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+
+  .hero-right {
+    position: relative;
+    background: var(--teal-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-illustration {
+    width: 80%;
+    max-width: 500px;
+    opacity: 0;
+    animation: fadeIn 1.2s 0.5s forwards;
+  }
+
+  /* decorative sail stripe background */
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 60%;
+    height: 120%;
+    background: linear-gradient(135deg, var(--sage-light) 0%, transparent 60%);
+    opacity: 0.4;
+    border-radius: 40% 60% 60% 40%;
+    transform: rotate(-10deg);
+  }
+
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    bottom: -5%;
+    left: -5%;
+    width: 50%;
+    height: 60%;
+    background: linear-gradient(135deg, var(--teal-light) 0%, transparent 60%);
+    opacity: 0.3;
+    border-radius: 60% 40% 40% 60%;
+  }
+
+  .hero-badge {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 100px;
+    height: 100px;
+    background: var(--sage-dark);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    font-family: 'Lato', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.4;
+    animation: spin 20s linear infinite;
+    z-index: 3;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hero-badge-inner {
+    animation: spinReverse 20s linear infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes spinReverse { to { transform: rotate(-360deg); } }
+
+  /* ─── DOG SVG ILLUSTRATION ─── */
+  .dog-coat-svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(91, 138, 138, 0.25));
+  }
+
+  /* ─── STORY STRIP ─── */
+  .story-strip {
+    background: var(--dark);
+    color: var(--offwhite);
+    padding: 1.2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    overflow: hidden;
+  }
+
+  .story-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--sage-light);
+  }
+
+  .story-item svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  .story-divider {
+    width: 4px;
+    height: 4px;
+    background: var(--sage);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── ABOUT ─── */
+  .about {
+    padding: 7rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .about-text .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .about-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-text h2 em {
+    font-style: italic;
+    color: var(--sage-dark);
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--mid);
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-pillars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .pillar {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: var(--white);
+    border-left: 3px solid var(--sage);
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .pillar:hover {
+    border-color: var(--teal);
+    transform: translateX(4px);
+  }
+
+  .pillar-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+  }
+
+  .pillar h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .pillar p {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--mid);
+    font-weight: 300;
+    margin: 0;
+  }
+
+  /* ─── COATS SECTION ─── */
+  .coats {
+    padding: 5rem 6rem 7rem;
+    background: var(--sand);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-header .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 300;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.8rem;
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
+    color: var(--mid);
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .coats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .coat-card {
+    background: var(--white);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+
+  .coat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(44, 56, 48, 0.12);
+  }
+
+  .coat-card-img {
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coat-card-img.sail-blue { background: linear-gradient(135deg, #c8dde8, #9bbfcc); }
+  .coat-card-img.sail-red { background: linear-gradient(135deg, #e8c8c8, #cc9b9b); }
+  .coat-card-img.sail-yellow { background: linear-gradient(135deg, #e8e0c0, #ccba88); }
+
+  .coat-icon-large {
+    font-size: 5rem;
+    opacity: 0.4;
+  }
+
+  .sail-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--sage-dark);
+    color: var(--white);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .sold-out-tag {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--dark);
+    color: var(--offwhite);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .coat-card-body {
+    padding: 1.5rem;
+  }
+
+  .coat-card-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .coat-origin {
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: var(--teal);
+    letter-spacing: 0.5px;
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+
+  .coat-desc {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--mid);
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  .coat-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .coat-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .coat-size {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: var(--mid);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .btn-add {
+    background: var(--sage);
+    color: var(--white);
+    border: none;
+    padding: 0.55rem 1.1rem;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-add:hover { background: var(--sage-dark); }
+  .btn-add:disabled { background: #ccc; cursor: not-allowed; }
+
+  /* ─── HOW IT WORKS ─── */
+  .how {
+    padding: 7rem 6rem;
+    background: var(--offwhite);
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  .how-step {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .how-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--sage-light);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .how-step h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .how-step p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--mid);
+    font-weight: 300;
+  }
+
+  /* ─── STORY FEATURE ─── */
+  .story-feature {
+    background: var(--sage-dark);
+    color: var(--white);
+    padding: 6rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-feature::before {
+    content: '"';
+    position: absolute;
+    top: -2rem;
+    left: 4rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .story-feature blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--offwhite);
+    position: relative;
+    z-index: 1;
+  }
+
+  .story-feature cite {
+    display: block;
+    margin-top: 1.5rem;
+    font-family: 'Lato', sans-serif;
+    font-style: normal;
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sage-light);
+  }
+
+  .story-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat {
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 1.5rem;
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--sage-light);
+  }
+
+  /* ─── BESPOKE ─── */
+  .bespoke {
+    padding: 7rem 6rem;
+    background: var(--teal-pale);
+    text-align: center;
+  }
+
+  .bespoke h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 1rem;
+  }
+
+  .bespoke h2 em { font-style: italic; color: var(--teal); }
+
+  .bespoke p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--mid);
+    font-weight: 300;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .bespoke-features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .bespoke-feat {
+    background: var(--white);
+    padding: 1.5rem 2rem;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--mid);
+    border-bottom: 2px solid var(--teal);
+    min-width: 180px;
+    text-align: center;
+  }
+
+  .bespoke-feat strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  /* ─── CONTACT / FOOTER ─── */
+  footer {
+    background: var(--dark);
+    color: var(--offwhite);
+    padding: 4rem 6rem 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-brand .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--sage-light);
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand .logo span { font-style: italic; color: var(--teal-light); }
+
+  .footer-brand p {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.5);
+    font-weight: 300;
+    max-width: 300px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li {
+    margin-bottom: 0.6rem;
+  }
+
+  .footer-col ul li a {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  .footer-col ul li a:hover { color: var(--sage-light); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-bottom p {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.3);
+    font-weight: 300;
+  }
+
+  .eco-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--sage-light);
+    font-weight: 700;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── WAVE DIVIDER ─── */
+  .wave {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .wave svg {
+    display: block;
+    width: 100%;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 7rem 2rem 3rem; }
+    .hero-right { height: 300px; }
+    .about { grid-template-columns: 1fr; padding: 4rem 2rem; gap: 3rem; }
+    .coats { padding: 4rem 2rem; }
+    .coats-grid { grid-template-columns: 1fr; }
+    .how { padding: 4rem 2rem; }
+    .how-grid { grid-template-columns: 1fr 1fr; }
+    .story-feature { grid-template-columns: 1fr; padding: 4rem 2rem; }
+    .bespoke { padding: 4rem 2rem; }
+    footer { padding: 3rem 2rem 1.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Tide <span>& Tails</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#coats">The Coats</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#bespoke">Bespoke</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Handmade in Hampshire</p>
+    <h1 class="hero-title">Old sails.<br><em>New adventures.</em></h1>
+    <p class="hero-sub">Every Tide & Tails coat is handmade from a retired dinghy sail - giving old sails a new life, and your four-legged crew member a warm, waterproof, one-of-a-kind coat.</p>
+    <div class="hero-cta">
+      <a href="#coats" class="btn-primary">Shop the Collection</a>
+      <a href="#about" class="btn-outline">Our Story</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <p> <img src="EM.png" width="500" height="500" alt="">&nbsp;</p>
+
+    
+<div class="hero-badge">
+      <div class="hero-badge-inner">
+        <span>100%</span>
+        <span>Recycled</span>
+        <span>✦ Sails ✦</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY STRIP -->
+<div class="story-strip">
+  <div class="story-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L4 9v12h6v-6h4v6h6V9L12 3z"/></svg>
+    Handmade in Hampshire
+  </div>
+  <div class="story-divider"></div>
+  <div class="story-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></svg>
+    Zero New Fabric
+  </div>
+  <div class="story-divider"></div>
+  <div class="story-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    Every Coat is Unique
+  </div>
+  <div class="story-divider"></div>
+  <div class="story-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17l4-8 4 4 4-6 4 10"/></svg>
+    Tested by Real Dogs
+  </div>
+  <div class="story-divider"></div>
+  <div class="story-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Waterproof &amp; Windproof
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-text reveal">
+    <p class="section-label">The Story Behind the Coat</p>
+    <h2>A sailor's idea.<br>A dog's <em>new favourite thing.</em></h2>
+    <p>Tide & Tails started   simply : retired sailing sails pile up behind every sailing club&nbsp; around the world, destined for landfill. Meanwhile, dogs on the Solent are getting rained on. Something had to be done.</p>
+    <p>Every coat is handmade from sails sourced locally  from around the Solent. The fleece lining? Upcycled too. No new fabric. No waste.&nbsp; Just a warm, weatherproof coat with a proper story behind it.</p>
+<p>The race patches stay on. Because every sail has been somewhere, and every dog deserves a coat with history.</p>
+  </div>
+  <div class="about-pillars reveal">
+    <div class="pillar">
+      <div class="pillar-icon">⛵</div>
+      <div>
+        <h3>Sails with a Past</h3>
+        <p>We source only retired sails from local sailing clubs and charities. Each sail has raced, competed, and weathered real conditions  which is exactly what your dog needs too.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🌿</div>
+      <div>
+        <h3>Eco-Friendly</h3>
+        <p>No new fabric is ever bought. The outer layer is recycled sail. The inner fleece lining is upcycled from donated clothing.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🐾</div>
+      <div>
+        <h3>Designed for Real Dogs</h3>
+        <p>The harness-style fit goes under the chest for proper warmth and security. It stays on. It moves with your dog. It was tested by Moose (see photos), who approved it immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COATS -->
+<section class="coats" id="coats">
+  <div class="section-header reveal">
+    <p class="section-label">The Collection</p>
+    <h2>Current Coats Available</h2>
+    <p>Each coat is one of a kind:&nbsp; once it's sold, that exact sail panel is gone forever. No two coats are ever alike.</p>
+  </div>
+
+  <div class="coats-grid">
+    <div class="coat-card reveal">
+      <div class="coat-card-img sail-blue">
+        <span class="sail-tag">New In</span><img src="solentBlue.png" width="640" height="260" alt=""/></span>
+      </div>
+      <div class="coat-card-body">
+        <h3>The Solent Blue</h3>
+        <p class="coat-origin">Sail origin: Stokes Bay SC windsurfer - circa 2018</p>
+        <p class="coat-desc">A striking pale-blue outer in a sturdy windsurfer sail, with a soft grey fleece lining. Retains the original sail number and two race marks from the 2018 season. Windproof, splash-resistant, and very handsome.</p>
+        <div class="coat-footer">
+          <div>
+            <div class="coat-price">£65</div>
+            <div class="coat-size">Medium dog</div>
+          </div>
+          <button class="btn-add">Add to Basket</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="coat-card reveal">
+      <div class="coat-card-img sail-red">
+        <span class="sail-tag">One Left</span>
+        <img src="Orange.png" width="640" height="260" alt=""/></span>
+      </div>
+      <div class="coat-card-body">
+        <h3>The Orange Bouy</h3>
+        <p class="coat-origin">Sail origin: TS Hornet Topper&nbsp; - CadetTraining Sail</p>
+        <p class="coat-desc">Thin, flexible Topper sail fabric in warm orange, lined with a grey fleece. The training sail has helped numerous cadets learn to sail for over 20 year: a genuine piece of local sailing history.</p>
+        <div class="coat-footer">
+          <div>
+            <div class="coat-price">£65</div>
+            <div class="coat-size">MEDIUM dog</div>
+          </div>
+          <button class="btn-add">Add to Basket</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="coat-card reveal">
+      <div class="coat-card-img sail-yellow">
+        <span class="sold-out-tag">Sold</span>
+        <img src="Andrew.png" width="640" height="260" alt=""/></span>
+      </div>
+      <div class="coat-card-body">
+        <h3>The Golden Gust</h3>
+        <p class="coat-origin">Sail origin: Andrew Simpson Foundation - sail bag</p>
+        <p class="coat-desc">A gorgeous warm-yellow training sail from the Andrew Simpson Foundation, lined in mustard fleece. Worn, patched, and full of character — this one went to a very lucky Labrador in Fareham.</p>
+        <div class="coat-footer">
+          <div>
+            <div class="coat-price">£65</div>
+            <div class="coat-size">MEDIUM dog</div>
+          </div>
+          <button class="btn-add" disabled>Sold Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-header reveal">
+    <p class="section-label">The Process</p>
+    <h2>How a sail becomes a coat</h2>
+    <p>From the boathouse to your dog in four steps  each one as sustainable as the last.</p>
+  </div>
+
+  <div class="how-grid">
+    <div class="how-step reveal">
+      <div class="how-number">01</div>
+      <h3>Sourcing the Sail</h3>
+      <p>Retired sails are collected from local sailing clubs around the Solent  Nothing is bought new. Every sail has already had a life on the water.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-number">02</div>
+      <h3>Choosing the Lining</h3>
+      <p>The inner fleece lining is upcycled from donated jumpers and fleeces. Soft, warm, and waste-free. Each coat's lining is as unique as its outer layer.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-number">03</div>
+      <h3>Cutting &amp; Sewing</h3>
+      <p>Each coat is hand-cut using a tried-and-tested pattern, adapted for different dog sizes. Sail material is tough  but with the right needle and technique, it sews beautifully.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="how-number">04</div>
+      <h3>Worn with Pride</h3>
+      <p>Fitted with Velcro straps, a protective collar, and a chest panel for real warmth. Then tested by real dogs (Moose approves) before it ever reaches yours.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE FEATURE -->
+<section class="story-feature">
+  <blockquote>
+    "A coat made from a sail that once raced at Stokes Bay, lined with upcycled fleece, keeping a dog warm on a windy day on the Solent. That is exactly the thing I set out to make."
+    <cite>— Evelyn, Founder of Tide & Tails</cite>
+  </blockquote>
+  <div class="story-stats">
+    <div class="stat">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Recycled outer fabric</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">0</div>
+      <div class="stat-label">New fabric purchased</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">∞</div>
+      <div class="stat-label">Happy dogs (theoretically)</div>
+    </div>
+  </div>
+</section>
+
+<!-- BESPOKE -->
+<section class="bespoke" id="bespoke">
+  <p class="section-label" style="font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--teal);font-weight:300;margin-bottom:0.8rem;">Made Just For You</p>
+  <h2>Want a <em>bespoke</em> coat?</h2>
+  <p>Have a favourite old sail you'd like made into something lasting? Or want a coat made to your own dog's exact measurements? We offer bespoke commissions - just get in touch.</p>
+
+  <div class="bespoke-features">
+    <div class="bespoke-feat">
+      <strong>Your Own Sail</strong>
+      Send us your old sail and we'll make it into a coat
+    </div>
+    <div class="bespoke-feat">
+      <strong>Custom Sizing</strong>
+      Measured exactly for your dog, any breed or size
+    </div>
+    <div class="bespoke-feat">
+      <strong>Lining Choice</strong>
+      Pick your fleece colour from our upcycled collection
+    </div>
+    <div class="bespoke-feat">
+      <strong>Keep the Patches</strong>
+      Race numbers and event patches preserved on request
+    </div>
+  </div>
+
+  <a href="mailto:hello@tideandtailscoats.co.uk" class="btn-primary">Get in Touch</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Tide <span>& Tails</span></div>
+      <p>Handmade dog coats from retired sailing sails. Made in Hampshire, with love for dogs and the sea. Every coat is one of a kind,&nbsp; just like the sail it came from, and just like the dog who will wear it.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#coats">The Coats</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#bespoke">Bespoke Orders</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Get in Touch</h4>
+      <ul>
+        <li><a href="mailto:hello@tideandtailscoats.co.uk">hello@tideandtailscoats.co.uk</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Etsy Shop</a></li>
+        <li><a href="#">Sizing Guide</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tide & Tails. All rights reserved.</p>
+    <div class="eco-badge">
+      <span>🌿</span>
+      Zero new fabric. Always.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav shadow on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow =
+      window.scrollY > 10 ? '0 2px 20px rgba(44,56,48,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
